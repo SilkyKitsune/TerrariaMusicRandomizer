@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace TerrariaMusicRandomizer;
 
-public static class Program
+public static class Program//make self contained ver?
 {
     private const int TotalSongs = 91;
 
@@ -27,13 +27,16 @@ public static class Program
             F.ReadAllText(PathsFile).Split(E.NewLine, StringSplitOptions.RemoveEmptyEntries)))
         {
             C.WriteLine("Enter seed (leave blank for auto)");
-            bool useCustomSeed = int.TryParse(C.ReadLine(), out int seed);
+            string seedInput = C.ReadLine();
 
-            if (!useCustomSeed)
+            int seed;
+            if (string.IsNullOrEmpty(seedInput))
             {
                 DateTime now = DateTime.Now;
                 seed = ((now.Year * 10000) + (now.Month * 100) + now.Day) ^ E.TickCount;
             }
+            else if (int.TryParse(seedInput, out seed)) { }
+            else seed = seedInput.GetHashCode();
 
             string packName = "TMR_" + seed,
                 outputPath = @"Output\" + packName,
